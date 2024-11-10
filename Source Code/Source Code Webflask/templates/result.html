@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- กำหนดให้หน้าเว็บ responsive โดยการปรับขนาดตามหน้าจออุปกรณ์ -->
+    <title>Result</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- โครงสร้างตาราง -->
+    <style>
+        /* th=หัว td=เนื้อหา */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* ฟิกความกว้างคอลัมน์ */
+        }
+
+        /* อันนี้เส้นตาราง */
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        /* อันนี้เนื้อหาในแต่ละคอลัมน์ */
+        th, td {
+            padding: 10px;
+            /* text-align: left; */
+            /* vertical-align: top; */ /* ให้ข้อความอยู่ด้านบน */
+            font-size: 40px; /* ปรับขนาดตัวหนังสือ ===============24for true===============40for paper=======================*/
+        }
+
+        /* อันนี้หัวคอลัมน์ */
+        th {
+            /* width: 10%; */ /* เอาไว้ปรับความกว้างของแต่ละคอลัมน์ */
+            font-size: 44px; /* ขนาดตัวหนังสือของหัวข้อคอลัมน์ ===============30for true===========44for paper=============*/
+        }
+
+        /*  */
+        /* td {
+            word-wrap: break-word; /* ตัดคำที่ยาวเกินไปให้พอดีกับเซลล์ 
+        } */
+
+        /* ปรับขนาดคอลัมน์ */
+        /* คอลัมน์แรก */
+        th:first-child, td:first-child {
+            width: 5%;
+            text-align: center; /* จัดข้อความในแนวนอน */
+            vertical-align: middle; /* จัดข้อความในแนวตั้ง */
+        }
+
+        /* คอลัมน์ที่สอง */
+        th:nth-child(2) {
+            width: 25%;
+            text-align: center;
+            vertical-align: middle;
+        }
+        td:nth-child(2) {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* คอลัมน์ที่สาม */
+        th:nth-child(3), td:nth-child(3) {
+            width: 35%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* คอลัมน์ที่สี่ */
+        th:nth-child(4) {
+            width: 25%;
+            text-align: center;
+            vertical-align: middle;
+        }
+        td:nth-child(4) {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* คอลัมน์ที่ห้า */
+        th:nth-child(5), td:nth-child(5) {
+            width: 10%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Chart */
+        .chart-container {
+            display: flex; 
+            justify-content: center; /* จัดให้อยู่ตรงกลางในแนวนอน */
+            align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+            width: 100%; /* ความกว้งChart = 100% คือ ให้Chartพอดีกับความกว้างเซลล์ */
+            height: 500px; /* ความสูงChart */
+        }
+
+        /* ตัวอักษรช่วง Warning */
+        .warning {
+            font-size: 36px; /* ปรับขนาดตัวหนังสือ =============24for true=============36for paper==============*/
+            color: red; /* เปลี่ยนสีข้อความเป็นสีแดง */
+            font-weight: bold; /* ทำให้ตัวหนังสือหนา */
+        }
+
+        /* หัวข้อ */
+        .headA{
+            font-size: 40px;/* ปรับขนาดตัวหนังสือ =============30for true=============40for paper==============*/
+            font-weight: bold;
+        }
+
+        /* เนื้อหา */
+        .dataA {
+            font-size: 36px;/* ปรับขนาดตัวหนังสือ =============24for true=============36for paper==============*/
+        }
+
+        /* เอาไว้ใส่Class ให่ข้อความมาตรงกลาง */
+        .centered {
+        text-align: center;
+        }
+        .centered a {
+        display: inline-block;
+        }
+
+        /* สไตล์ของ Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+            font-family: Arial, sans-serif;
+            position: fixed;
+            top: 0;
+            transform: translateX(50%);
+            width: 50%;
+            margin: 0 auto;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .navbar .left a {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .navbar .right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a:hover {
+            color: #4CAF50;
+        }
+
+        /* สไตล์สำหรับ footer */
+        .footer {
+            width: 100%;
+            padding: 20px;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .footer .steps {
+            display: flex;
+            justify-content: space-around;
+            text-align: left;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer .step {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .footer .step h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .footer .step p {
+            font-size: 16px;
+        }
+
+        /* Reset สไตล์ body */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 50px; /* ปรับระยะห่างของเนื้อหาจาก Navbar */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="left">
+            <a href="/">หน้าแรก</a>
+        </div>
+        <div class="right">
+            <a href="/">อัปโหลดไฟล์</a>
+            <a href="{{ url_for('static', filename='pdf/paper.pdf') }}" download>เกี่ยวกับโครงงาน</a>
+            <a href="/about">คณะผู้จัดทำ</a>
+        </div>
+    </div>
+
+    <!-- <h1>ผลลัพธ์</h1> -->
+
+    <p class="headA">ผลลัพธ์</p>
+
+    <!-- เก็บข้อมูลการเตือนในลิสต์ -->
+    {% set hiphop_segments = [] %}
+    {% set rock_segments = [] %}
+    {% set metal_segments = [] %}
+
+    {% for result in results %}
+        {% if result.predicted_genre == 'แรป' %}
+            {% set _ = hiphop_segments.append(result.segment) %}
+        {% elif result.predicted_genre == 'ร็อก' %}
+            {% set _ = rock_segments.append(result.segment) %}
+        {% elif result.predicted_genre == 'เมทัล' %}
+            {% set _ = metal_segments.append(result.segment) %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- แสดงข้อความเตือน -->
+    {% if hiphop_segments %}
+        <p class="warning">เพลงนี้ช่วงที่ {{ hiphop_segments | join(', ') }} มีดนตรีประเภทแรปเป็นส่วนใหญ่</p>
+        <p class="warning">จากการวิจัยทำให้พบว่าคลื่นเบต้าเวฟ(คลื่นความถี่)ที่เพลงฮิปฮอป ปล่อยออกมามีความถี่ที่สูงทำให้ส่งผลเสียต่อผู้ฟังมีระดับความวิตกกังวลที่สูงขึ้นและอาจจะเป็นผลเสียกับผู้ป่วยที่ได้ฟังเพลง</p>
+        <p class="warning"><a href="https://hunewsservice.com/uncategorized/trending-hip-hop-and-other-songs-may-be-harmful-to-ones-mental-health/" target="_blank">อ่านเพิ่มเติมที่นี่</a></p>
+    {% endif %}
+    {% if rock_segments %}
+        <p class="warning">เพลงนี้ช่วงที่ {{ rock_segments | join(', ') }} มีดนตรีประเภทร็อกเป็นส่วนใหญ่</p>
+        <p class="warning">จากการศึกษาค้นพบว่าเพลงแต่ละชนิดส่งผลต่ออารมณ์ ความรู้สึกและความเครียดต่อผู้ฟัง หลังจากฟังเพลงร็อคพบว่าผู้คนส่วนใหญ่มีอัตราความตึงเครียด ความวิตกกังวลและ มีความก้าวร้าวที่สูงขึ้น</p>
+        <p class="warning"><a href="https://pubmed.ncbi.nlm.nih.gov/9439023/" target="_blank">อ่านเพิ่มเติมที่นี่</a></p>
+    {% endif %}
+    {% if metal_segments %}
+        <p class="warning">เพลงนี้ช่วงที่ {{ metal_segments | join(', ') }} มีดนตรีประเภทเมทัลเป็นส่วนใหญ่</p>
+        <p class="warning">เพลงดนตรีเมทัลส่วนใหญ่จะเป็นแนวเพลงที่ฟังแล้วเศร้าอยากทำร้ายตัวเอง/ฆ่าตัวตาย และแนวเพลง black metal จะเป็นเพลงที่เกี่ยวกับความรุนแรงต่อตัวเองทำให้แนวเพลงดังกล่าวถูกระบุไว้ในงานวิจัยว่าเป็นปัจจัยเสี่ยงต่อการฆ่าตัวตายและการทำร้ายตัวเอง</p>
+        <p class="warning"><a href="https://link.springer.com/article/10.1007/s12144-022-03108-9#Sec6" target="_blank">อ่านเพิ่มเติมที่นี่</a></p>
+    {% endif %}
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>เพลงช่วงที่</th><!-- ช่อง1 ช่วง -->
+                <th>ทำนองส่วนใหญ่และสัดส่วน</th><!-- ช่อง2 ทำนองที่ทำนาย+สัดส่วน -->
+                <th>แผนภูมิ</th><!-- ช่อง3 แผนภูมิ -->
+                <th>เนื้อร้องที่จับได้</th><!-- ช่อง4 คำที่เจอ -->
+                <th>จำนวนคำเชิงลบที่จับได้</th><!-- ช่อง5 คำเชิงลบ -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for result, segment, genre_counts in zip(results, bad_word_summary.segment_results, segment_genre_counts) %}
+                <tr>
+                    <!-- ช่อง1 ช่วง -->
+                    <td>{{ result.segment }}</td>
+
+                    <!-- ช่อง2 ทำนองที่ทำนาย+สัดส่วน -->
+                    <td>
+                        <p>มีทำนองเพลงประเภท: "{{ result.predicted_genre }}" เป็นส่วนใหญ่</p>
+                        <ul>
+                            {% for genre, percentage in result.genre_percentages.items() %}
+                                <li>{{ genre }}: {{ percentage }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+
+                    <!-- ช่อง3 แผนภูมิ -->
+                    <td>
+                        <div class="chart-container">
+                            <canvas id="chart-{{ result.segment }}"></canvas>
+                        </div>
+                    </td>
+
+                    <!-- ช่อง4 คำที่เจอ -->
+                    <td>{{ segment.transcript }}</td>
+
+                    <!-- ช่อง5 คำเชิงลบ -->
+                    <td>{{ segment.negative_count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        const results = {{ results | tojson }};
+        results.forEach(result => {
+            const ctx = document.getElementById(`chart-${result.segment}`).getContext('2d');
+            const data = {
+                labels: Object.keys(result.genre_percentages),
+                datasets: [{
+                    label: `Segment ${result.segment}`,
+                    data: Object.values(result.genre_percentages).map(value => parseFloat(value)),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    
+                    /* ตั้งค่าพวกข้อมูลในChart */
+                    plugins: {
+                        legend: {
+                            position: 'right',/* ปกติอยู่ข้างบน ย้ายไปด้านขวาของChart */
+                            labels: {
+                                font: {
+                                    size: 32 /* ขนาดอักษร=========22=========== */
+                                },
+                                boxWidth: 15, /* ขนาดกล่อง */
+                                padding: 20 /* ความห่างแต่ละกล่อง */
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <p class="headA">สัดส่วนคำเชิงลบที่จับได้:</p>
+    <p class="dataA">จำนวนคำร้องเชิงลบที่จับได้: ประมาณ {{ bad_word_summary.total_negative_count }} คำ</p>
+    <p class="dataA">จำนวนคำร้องทั้งหมดที่จับได้: ประมาณ {{ bad_word_summary.total_words_count }} คำ</p>
+    <p class="dataA">จำนวนคำร้องเชิงลบที่จับได้ต่อคำร้องทั้งหมดที่จับได้: ประมาณ {{ bad_word_summary.negative_percentage_total_words }} %</p>
+
+    <p class="headA">คำร้องทั้งหมดที่ตรวจจับได้:</p>
+    <p class="dataA">{{ transcript }}</p>
+
+    <p class="headA">เวลาในการประมวลผล:</p>
+    <p class="dataA">เวลาที่ใช้ในการอัปโหลด: {{ upload_time }} วินาที</p>
+    <p class="dataA">เวลาที่ใช้ในคาดการณ์ประเภทเพลง: {{ predict_time }} วินาที</p>
+    <p class="dataA">เวลาที่ใช้ในการปรับไฟล์เพลง(Spleeter): {{ convert_time }} วินาที</p>
+    <p class="dataA">เวลาที่ใช้ในการประมวลผลคำเชิงลบ(GCS): {{ point_time }} วินาที</p>
+    <p class="dataA">เวลาที่ใช้ทั้งหมด: {{ all_time }} วินาที</p>
+    
+    <p class="headA centered"><a href="/">อัปโหลดไฟล์เพลงอื่น</a></p>
+
+    <!-- Footer -->
+    <div class="footer">
+        <h2>วิธีการใช้งานเว็บไซต์</h2>
+        <div class="steps">
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/1.select.png') }}" alt="เลือกไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">1. เลือกไฟล์</h3>
+                <p>เลือกไฟล์จากเครื่อง</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/2.upload.png') }}" alt="อัปโหลดไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">2. อัปโหลด</h3>
+                <p>อัปโหลดไฟล์และรอผลลัพธ์การทำนายประมาณ 1-2 นาที ตามขนาดไฟล์เพลงที่อัปโหลด</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/3.result.png') }}" alt="ตรวจดูผลลัพธ์" width="180" height="150">
+                <h3>3. ตรวจดูผลลัพธ์</h3>
+                <p>สามารถตรวจดูผลลัพธ์ต่างๆ และนำไปประกอบการตัดสินใจในการฟังเพลงจากการประมวลผลได้เลย</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- กำหนดรูปแบบอักขระเป็น UTF-8 ซึ่งรองรับอักขระหลายภาษา -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- กำหนดให้หน้าเว็บ responsive โดยการปรับขนาดตามหน้าจออุปกรณ์ -->
+    <title>About</title> <!-- กำหนดชื่อหน้าเว็บที่จะแสดงบนแท็บเบราว์เซอร์ -->
+    
+    <style>
+        /* การจัดรูปแบบส่วนหัว */
+        .navbar {
+            display: flex; /* ใช้ flexbox ในการจัดเรียงลิงก์ในแนวนอน */
+            justify-content: space-between; /* จัดตำแหน่งให้ลิงก์ด้านซ้ายและขวาอยู่ไกลกัน */
+            align-items: center; /* จัดตำแหน่งลิงก์ให้อยู่กึ่งกลางในแนวตั้ง */
+            padding: 10px 20px; /* เพิ่มพื้นที่ว่างด้านใน navbar (ด้านบน-ล่าง 10px, ด้านซ้าย-ขวา 20px) */
+            background-color: #f8f8f8; /* กำหนดสีพื้นหลัง navbar */
+            border-bottom: 1px solid #ddd; /* กำหนดเส้นขอบด้านล่างของ navbar */
+            font-family: Arial, sans-serif; /* กำหนดฟอนต์เป็น Arial */
+            position: fixed; /* ทำให้ navbar ติดอยู่ที่ด้านบนของหน้าต่างแม้จะเลื่อนหน้าเว็บ */
+            top: 0; /* กำหนดตำแหน่งให้ navbar ชิดขอบบน */
+            /*left: 0; /* กำหนดตำแหน่งให้ navbar ชิดขอบซ้าย */
+            width: 50%; /* กำหนดความกว้างให้ครอบคลุมทั้งหน้าจอ */
+            margin: 0 auto; /* จัด Navbar ให้อยู่ตรงกลาง */
+            z-index: 1000; /* กำหนดลำดับการแสดงผลให้อยู่เหนือเนื้อหาอื่นๆ */
+        }
+    
+        /* การจัดรูปแบบลิงก์ */
+        .navbar a {
+            color: #333; /* กำหนดสี */
+            text-decoration: none; /* เอาเส้นขีดเส้นใต้ลิงก์ออก */
+            font-size: 18px; /* กำหนดขนาดตัวอักษรของลิงก์เป็น 18px */
+        }
+    
+        /* สไตล์สำหรับลิงก์หน้าแรก */
+        .navbar .left a {
+            font-weight: bold; /* ทำให้ตัวอักษรหนาสำหรับลิงก์หน้าแรก */
+            font-size: 20px; /* กำหนดขนาดตัวอักษรของลิงก์หน้าแรกให้ใหญ่ขึ้น */
+        }
+    
+        /* การจัดเรียงลิงก์ด้านขวา */
+        .navbar .right {
+            display: flex; /* ใช้ flexbox ในการจัดเรียงลิงก์ในแนวนอน */
+            gap: 20px; /* เว้นช่องว่างระหว่างลิงก์ด้านขวา 20px */
+        }
+    
+        /* สีของลิงก์จะเปลี่ยนเมื่อ hover */
+        .navbar a:hover {
+            color: #4CAF50; /* เปลี่ยนสีของลิงก์เป็นสีเขียวตอนเอาเมาส์ไปวาง */
+        }
+    
+        /* จัดให้อยู่ตรงกลาง */
+        body {
+            display: flex; /* ใช้ flexbox เพื่อจัดเรียงองค์ประกอบภายใน */
+            justify-content: center; /* จัดตำแหน่งองค์ประกอบให้อยู่ตรงกลางแนวนอน */
+            align-items: center; /* จัดตำแหน่งองค์ประกอบให้อยู่ตรงกลางแนวตั้ง */
+            min-height: 10vh; /* กำหนดให้ความสูงของหน้าต่างอย่างน้อย 100% ของความสูงของ viewport */
+            margin: 0; /* ยกเลิก margin ที่เป็นค่าเริ่มต้นของ body */
+            padding-top: 100px; /* ปรับระยะห่างระหว่าง Navbar กับเนื้อหาหลัก */
+            font-family: Arial, sans-serif; /* กำหนดฟอนต์ของเนื้อหาเป็น Arial */
+            background-color: #f5f5f5; /* กำหนดสีพื้นหลังของหน้าเว็บ */
+            flex-direction: column; /* จัดเรียงองค์ประกอบในแนวตั้ง */
+        }
+    
+/*==============================================================================================*/
+
+        .about {
+            width: 100%;
+            padding: 20px;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        .about h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .about .steps {
+            display: flex;
+            justify-content: center; /* จัดกล่องรูปภาพให้อยู่ตรงกลาง */
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+            gap: 10px; /* เพิ่มระยะห่างระหว่างรูปภาพ */
+            width: 100%; /* ให้ความกว้างของกล่องรูปภาพเต็มที่ */
+            /* max-width: 800px; */ /* จำกัดความกว้างให้ไม่กว้างเกินไป */
+        }
+
+        .about .step {
+            /* flex: 1; */
+            padding: 10px;
+            margin: 50px; /* ยกเลิกการเพิ่มระยะห่างเพิ่มเติม */
+        }
+
+        .about .step h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .about .step p {
+            font-size: 16px;
+        }
+
+        /* รูปภาพ กับ ข้อความข้างล่าง */
+        .about .step img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+            /* margin-right: 10px; */ /* ขยับภาพทางขวาโดยเพิ่มระยะห่างจากขอบซ้าย */
+        }
+
+        .about .step .caption {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+/*==========================================================================*/
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            padding: 20px;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .footer .steps {
+            display: flex;
+            justify-content: space-around;
+            text-align: left;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer .step {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .footer .step h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .footer .step p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ส่วนหัวเว็บ -->
+    <div class="navbar">
+        <div class="left">
+            <a href="/">หน้าแรก</a>
+        </div>
+        <div class="right">
+            <a href="/">อัปโหลดไฟล์</a>
+            <a href="{{ url_for('static', filename='pdf/paper.pdf') }}" download>เกี่ยวกับโครงงาน</a>
+            <a href="/about">คณะผู้จัดทำ</a>
+        </div>
+    </div>
+
+
+
+    <div class="about">
+        <h2>คณะผู้จัดทำ</h2>
+
+        <div class="steps">
+            <!-- ไอซ์ -->
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/1_Ice.jpg') }}" alt="Ice">
+                <p class="caption">นายณัฐกฤษ ชุ่มใจ</p>
+                <p>ติดต่อ: nattakrit2543@gmail.com</p>
+            </div>
+
+            <!-- ปาย -->
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/2_Pai2.jpg') }}" alt="Pai">
+                <p class="caption" style="margin-top: 16px;">นายรพี ลุกจันทึก</p>
+                <p>ติดต่อ: rapee.luk@pccpl.ac.th</p>
+    
+                <!-- อาจารย์ตั้ม -->
+                <div class="step">
+                    <h2>อาจารย์ที่ปรึกษา</h2>
+                    <img src="{{ url_for('static', filename='images/4_Professor.jpg') }}" alt="Professor">
+                    <p class="caption">ดร.เศรษฐา ตั้งค้าวานิช</p>
+                    <p>ติดต่อ: setthat@nu.ac.th</p>
+                </div>
+            </div>
+
+            <!-- ไฮน์ -->
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/3_Hine.jpg') }}" alt="Hine">
+                <p class="caption">นายหัตถสิทธิ์ รัตนศักดิ์ </p>
+                <p>ติดต่อ: hatthasit.hine@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <!-- Footer ส่วนล่าง -->
+    <div class="footer">
+        <h2>วิธีการใช้งานเว็บไซต์</h2>
+        <div class="steps">
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/1.select.png') }}" alt="เลือกไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">1. เลือกไฟล์</h3>
+                <p>เลือกไฟล์จากเครื่อง</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/2.upload.png') }}" alt="อัปโหลดไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">2. อัปโหลด</h3>
+                <p>อัปโหลดไฟล์และรอผลลัพธ์การทำนายประมาณ 1-2 นาที ตามขนาดไฟล์เพลงที่อัปโหลด</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/3.result.png') }}" alt="ตรวจดูผลลัพธ์" width="180" height="150">
+                <h3>3. ตรวจดูผลลัพธ์</h3>
+                <p>สามารถตรวจดูผลลัพธ์ต่างๆ และนำไปประกอบการตัดสินใจในการฟังเพลงจากการประมวลผลได้เลย</p>
+            </div>
+        </div>
+    </div>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- กำหนดรูปแบบอักขระเป็น UTF-8 ซึ่งรองรับอักขระหลายภาษา -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- กำหนดให้หน้าเว็บ responsive โดยการปรับขนาดตามหน้าจออุปกรณ์ -->
+    <title>Upload Audio File</title> <!-- กำหนดชื่อหน้าเว็บที่จะแสดงบนแท็บเบราว์เซอร์ -->
+    
+    <style>
+        /* การจัดรูปแบบส่วนหัว */
+        .navbar {
+            display: flex; /* ใช้ flexbox ในการจัดเรียงลิงก์ในแนวนอน */
+            justify-content: space-between; /* จัดตำแหน่งให้ลิงก์ด้านซ้ายและขวาอยู่ไกลกัน */
+            align-items: center; /* จัดตำแหน่งลิงก์ให้อยู่กึ่งกลางในแนวตั้ง */
+            padding: 10px 20px; /* เพิ่มพื้นที่ว่างด้านใน navbar (ด้านบน-ล่าง 10px, ด้านซ้าย-ขวา 20px) */
+            background-color: #f8f8f8; /* กำหนดสีพื้นหลังของ navbar เป็นสีเทาอ่อน */
+            border-bottom: 1px solid #ddd; /* กำหนดเส้นขอบด้านล่างของ navbar เป็นเส้นบางๆ สีเทา */
+            font-family: Arial, sans-serif; /* กำหนดฟอนต์เป็น Arial */
+            position: fixed; /* ทำให้ navbar ติดอยู่ที่ด้านบนของหน้าต่างแม้จะเลื่อนหน้าเว็บ */
+            top: 0; /* กำหนดตำแหน่งให้ navbar ชิดขอบบน */
+            /*left: 0; /* กำหนดตำแหน่งให้ navbar ชิดขอบซ้าย */
+            width: 50%; /* กำหนดความกว้างให้ครอบคลุมทั้งหน้าจอ */
+            margin: 0 auto; /* จัด Navbar ให้อยู่ตรงกลาง */
+            z-index: 1000; /* กำหนดลำดับการแสดงผลให้อยู่เหนือเนื้อหาอื่นๆ */
+        }
+    
+        /* การจัดรูปแบบลิงก์ */
+        .navbar a {
+            color: #333; /* กำหนดสีของลิงก์เป็นสีเทาเข้ม */
+            text-decoration: none; /* เอาเส้นขีดเส้นใต้ลิงก์ออก */
+            font-size: 18px; /* กำหนดขนาดตัวอักษรของลิงก์เป็น 18px */
+        }
+    
+        /* สไตล์สำหรับลิงก์หน้าแรก */
+        .navbar .left a {
+            font-weight: bold; /* ทำให้ตัวอักษรหนาสำหรับลิงก์หน้าแรก */
+            font-size: 20px; /* กำหนดขนาดตัวอักษรของลิงก์หน้าแรกให้ใหญ่ขึ้น */
+        }
+    
+        /* การจัดเรียงลิงก์ด้านขวา */
+        .navbar .right {
+            display: flex; /* ใช้ flexbox ในการจัดเรียงลิงก์ในแนวนอน */
+            gap: 20px; /* เว้นช่องว่างระหว่างลิงก์ด้านขวา 20px */
+        }
+    
+        /* สีของลิงก์จะเปลี่ยนเมื่อ hover */
+        .navbar a:hover {
+            color: #4CAF50; /* เปลี่ยนสีของลิงก์เป็นสีเขียวเมื่อเอาเมาส์ไปชี้ */
+        }
+    
+        /* จัดให้อยู่ตรงกลาง */
+        body {
+            display: flex; /* ใช้ flexbox เพื่อจัดเรียงองค์ประกอบภายใน */
+            justify-content: center; /* จัดตำแหน่งองค์ประกอบให้อยู่ตรงกลางแนวนอน */
+            align-items: center; /* จัดตำแหน่งองค์ประกอบให้อยู่ตรงกลางแนวตั้ง */
+            min-height: 10vh; /* กำหนดให้ความสูงของหน้าต่างอย่างน้อย 100% ของความสูงของ viewport */
+            margin: 0; /* ยกเลิก margin ที่เป็นค่าเริ่มต้นของ body */
+            padding-top: 150px; /* ปรับระยะห่างระหว่าง Navbar กับเนื้อหาหลัก */
+            font-family: Arial, sans-serif; /* กำหนดฟอนต์ของเนื้อหาเป็น Arial */
+            background-color: #f5f5f5; /* กำหนดสีพื้นหลังของหน้าเว็บเป็นสีเทาอ่อน */
+            flex-direction: column; /* จัดเรียงองค์ประกอบในแนวตั้ง */
+            
+        }
+    
+        /* ปรับขนาดตัวอักษรของ h1 */
+        h1 {
+            font-size: 36px; /* กำหนดขนาดตัวอักษรของหัวเรื่องเป็น 36px */
+            margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่างของหัวเรื่อง */
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+        }
+    
+        /* ปรับการจัดวางของ input และ button ให้อยู่ในแถวเดียวกัน */
+        .upload-container {
+            display: flex; /* ใช้ flexbox ในการจัดเรียงองค์ประกอบในแนวนอน */
+            align-items: center; /* จัดองค์ประกอบให้อยู่ตรงกลางแนวตั้ง */
+            justify-content: center; /* จัดองค์ประกอบให้อยู่ตรงกลางแนวนอน */
+            width: 100%; /* กำหนดความกว้างให้เต็มหน้าจอ */
+            max-width: 800px; /* จำกัดความกว้างสูงสุดที่ 800px */
+        }
+    
+        /* ปรับขนาดและรูปแบบของช่องอัปโหลด */
+        .file-path {
+            font-size: 18px; /* กำหนดขนาดตัวอักษรของช่องข้อความเป็น 18px */
+            padding: 15px; /* กำหนด padding ให้ช่องข้อความ */
+            width: 100%; /* ขยายความกว้างของช่องอัปโหลดให้เต็มที่ */
+            border: 2px solid #4CAF50; /* กำหนดเส้นขอบเป็นสีเขียว */
+            border-radius: 0 5px 5px 0; /* ทำให้มุมขวาของช่องอัปโหลดโค้งมน */
+            margin-right: 10px; /* เว้นระยะห่างระหว่างช่องข้อความกับปุ่ม Upload */
+        }
+    
+        /* ปรับขนาดของปุ่ม Upload */
+        button {
+            font-size: 20px; /* กำหนดขนาดตัวอักษรของปุ่มเป็น 20px */
+            padding: 15px 30px; /* กำหนด padding ภายในปุ่ม */
+            background-color: #4CAF50; /* กำหนดสีพื้นหลังของปุ่ม */
+            color: white; /* กำหนดสีตัวอักษรในปุ่ม */
+            border: none; /* ยกเลิกขอบของปุ่ม */
+            cursor: pointer; /* เปลี่ยนรูปแบบเมาส์เป็นแบบ pointer */
+            border-radius: 5px; /* ทำให้มุมของปุ่มโค้งมน */
+            white-space: nowrap; /* บังคับให้ข้อความไม่ขึ้นบรรทัดใหม่ */
+        }
+    
+        button:hover {
+            background-color: #45a049; /* เปลี่ยนสีปุ่มเป็นเขียวเข้มขึ้นเมื่อ hover */
+        }
+    
+        /* ปุ่มเลือกไฟล์ */
+        #file-upload-btn {
+            background-color: #f1f1f1; /* กำหนดสีพื้นหลังของปุ่มเลือกไฟล์เป็นสีเทาอ่อน */
+            color: #333; /* กำหนดสีตัวอักษรของปุ่มเป็นสีเทาเข้ม */
+            border: 2px solid #4CAF50; /* กำหนดเส้นขอบปุ่มเป็นสีเขียว */
+            border-radius: 5px; /* ทำให้มุมของปุ่มโค้งมน */
+            font-size: 18px; /* กำหนดขนาดตัวอักษรของปุ่มเลือกไฟล์เป็น 18px */
+            padding: 15px 20px; /* กำหนด padding ให้กับปุ่มเลือกไฟล์ */
+            cursor: pointer; /* เปลี่ยนรูปแบบเมาส์เป็นแบบ pointer */
+            margin-right: 10px; /* เว้นระยะห่างระหว่างปุ่มเลือกไฟล์กับช่องอัปโหลด */
+            width: 250px; /* กำหนดความกว้างของปุ่มเลือกไฟล์เป็น 250px */
+        }
+    
+        #file-upload-btn:hover {
+            background-color: #ddd; /* เปลี่ยนสีพื้นหลังปุ่มเป็นสีเทาเข้มเมื่อ hover */
+        }
+    
+        /* ปรับขนาดของข้อความสถานะ */
+        #status {
+            font-size: 18px; /* กำหนดขนาดตัวอักษรของข้อความสถานะเป็น 18px */
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+            margin-top: 20px; /* เว้นระยะห่างด้านบนของข้อความสถานะ */
+            color: #333; /* กำหนดสีตัวอักษรของข้อความสถานะเป็นสีเทาเข้ม */
+        }
+
+        /* Footer */
+        .footer {
+            
+            width: 100%;
+            padding: 20px;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin-top: 150px;
+            
+        }
+
+        .footer h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .footer .steps {
+            display: flex;
+            justify-content: space-around;
+            text-align: left;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer .step {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .footer .step h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .footer .step p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ส่วนหัวเว็บ -->
+    <div class="navbar">
+        <div class="left">
+            <a href="/">หน้าแรก</a>
+        </div>
+        <div class="right">
+            <a href="/">อัปโหลดไฟล์</a>
+            <a href="{{ url_for('static', filename='pdf/paper.pdf') }}" download>เกี่ยวกับโครงงาน</a>
+            <a href="/about">คณะผู้จัดทำ</a>
+        </div>
+    </div>
+
+    <div class="upload-wrapper">
+        <h1>อัปโหลดไฟล์เพลง</h1>
+        <div class="upload-container">
+            <button id="file-upload-btn">เลือกไฟล์</button>
+            <input type="text" class="file-path" placeholder="ยังไม่มีไฟล์ที่เลือก" readonly>
+            <button type="submit" id="upload-btn">อัปโหลด</button>
+        </div>
+        <p id="status"></p>
+        <input type="file" id="file-upload" name="file" accept=".wav,.mp3" style="display: none;">
+    </div>
+
+    <!-- Footer ส่วนล่าง -->
+    <div class="footer">
+        <h2>วิธีการใช้งานเว็บไซต์</h2>
+        <div class="steps">
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/1.select.png') }}" alt="เลือกไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">1. เลือกไฟล์</h3>
+                <p>เลือกไฟล์จากเครื่อง</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/2.upload.png') }}" alt="อัปโหลดไฟล์" width="200" height="90">
+                <h3 style="margin-top: 84px;">2. อัปโหลด</h3>
+                <p>อัปโหลดไฟล์และรอผลลัพธ์การทำนายประมาณ 1-2 นาที ตามขนาดไฟล์เพลงที่อัปโหลด</p>
+            </div>
+            <div class="step">
+                <img src="{{ url_for('static', filename='images/3.result.png') }}" alt="ตรวจดูผลลัพธ์" width="180" height="150">
+                <h3>3. ตรวจดูผลลัพธ์</h3>
+                <p>สามารถตรวจดูผลลัพธ์ต่างๆ และนำไปประกอบการตัดสินใจในการฟังเพลงจากการประมวลผลได้เลย</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileUploadBtn = document.getElementById('file-upload-btn');
+        const fileUploadInput = document.getElementById('file-upload');
+        const filePathInput = document.querySelector('.file-path');
+        const uploadBtn = document.getElementById('upload-btn');
+        const status = document.getElementById('status');
+
+        const navbarLinks = document.querySelectorAll('.navbar a'); // เลือกลิงก์ทั้งหมดใน navbar
+
+        // ฟังก์ชันเพื่อปิดการใช้งานปุ่มและลิงก์
+        function disableAllButtons() {
+            uploadBtn.disabled = true; // ปิดการใช้งานปุ่มอัปโหลด
+            fileUploadBtn.disabled = true; // ปิดการใช้งานปุ่มเลือกไฟล์
+            navbarLinks.forEach(link => {
+                link.style.pointerEvents = 'none'; // ปิดการใช้งานการคลิกลิงก์
+                link.style.opacity = '0.5'; // ทำให้ลิงก์โปร่งแสงเพื่อบอกว่าปิดการใช้งานแล้ว
+            });
+        }
+
+        // ฟังก์ชันเพื่อเปิดการใช้งานปุ่มและลิงก์อีกครั้ง
+        function enableAllButtons() {
+            uploadBtn.disabled = false; // เปิดการใช้งานปุ่มอัปโหลด
+            fileUploadBtn.disabled = false;
+            navbarLinks.forEach(link => {
+                link.style.pointerEvents = 'auto'; // เปิดการใช้งานการคลิกลิงก์
+                link.style.opacity = '1'; // คืนค่าให้ลิงก์กลับมาเป็นปกติ
+            });
+        }
+
+        // เมื่อคลิกปุ่ม "เลือกไฟล์" ให้เปิดหน้าต่างเลือกไฟล์
+        fileUploadBtn.addEventListener('click', function() {
+            fileUploadInput.click();
+        });
+
+        // เมื่อมีการเลือกไฟล์ แสดงชื่อไฟล์ในช่อง input
+        fileUploadInput.addEventListener('change', function() {
+            if (fileUploadInput.files.length > 0) {
+                filePathInput.value = fileUploadInput.files[0].name;
+            }
+        });
+
+        // อัปโหลดไฟล์
+        uploadBtn.addEventListener('click', function(event) {
+            if (fileUploadInput.files.length === 0) {
+                alert('กรุณาเลือกไฟล์ก่อนอัปโหลด');
+                return;
+            }
+
+            event.preventDefault();
+            disableAllButtons(); // ปิดการใช้งานปุ่มและลิงก์ทั้งหมดขณะรอการอัปโหลด
+
+            const formData = new FormData();
+            formData.append('file', fileUploadInput.files[0]);
+
+            const xhr = new XMLHttpRequest();
+            status.textContent = 'กำลังอัปโหลดและประมวลผล...';
+
+            xhr.open('POST', '/upload', true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    status.textContent = 'อัปโหลดเสร็จแล้ว กำลังประมวลผลลัพธ์ กรุณารอซักครู่...';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.status) {
+                            status.textContent = response.status;
+                            enableAllButtons(); // เปิดการใช้งานปุ่มอีกครั้งหลังจากการประมวลผลเสร็จสิ้น
+                        } else {
+                            const resultUrl = `/result?results=${encodeURIComponent(JSON.stringify(response.results))}&bad_word_summary=${encodeURIComponent(JSON.stringify(response.bad_word_summary))}&transcript=${response.transcript}&upload_time=${response.upload_time}&predict_time=${response.predict_time}&convert_time=${response.convert_time}&point_time=${response.point_time}&all_time=${response.all_time}&segment_genre_counts=${response.segment_genre_counts}`;
+                            window.location.href = resultUrl;
+                        }
+                    } catch (error) {
+                        status.textContent = 'Error parsing server response.';
+                        enableAllButtons(); // เปิดการใช้งานปุ่มอีกครั้งหลังจากการประมวลผลล้มเหลว
+                    }
+                } else {
+                    status.textContent = 'Upload failed. Please try again.';
+                    enableAllButtons(); // เปิดการใช้งานปุ่มอีกครั้งหลังจากการอัปโหลดล้มเหลว
+                }
+            };
+
+            xhr.onerror = function() {
+                status.textContent = 'Upload failed due to a network error. Please try again.';
+                enableAllButtons(); // เปิดการใช้งานปุ่มอีกครั้งหลังจากการอัปโหลดล้มเหลว
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>
